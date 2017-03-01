@@ -93,4 +93,5 @@ func TestJSON2(t *testing.T) {
 	var ts TestStruct
 	err := json.Unmarshal([]byte(test), &ts)
 	assert.Nil(t, err, "should not error unmarshalling")
+	fmt.Println(ts.B)
 }

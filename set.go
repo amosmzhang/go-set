@@ -116,7 +116,9 @@ func (s *Set) MarshalJSON() ([]byte, error) {
 
 func (s *Set) UnmarshalJSON(b []byte) error {
 	if !s.init {
-		s = New()
+		s.items = make(map[interface{}]struct{})
+		s.lock = &sync.RWMutex{}
+		s.init = true
 	}
 
 	var items []interface{}
