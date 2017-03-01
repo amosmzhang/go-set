@@ -113,6 +113,10 @@ func (s *Set) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Set) UnmarshalJSON(b []byte) error {
+	if s == nil {
+		s = New()
+	}
+
 	var items []interface{}
 	if err := json.Unmarshal(b, &items); err != nil {
 		return err
