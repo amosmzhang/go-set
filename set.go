@@ -9,6 +9,7 @@ import (
 type Set struct {
 	items map[interface{}]struct{}
 	lock  *sync.RWMutex
+	init  bool
 }
 
 // basic ops
@@ -16,6 +17,7 @@ func New(items ...interface{}) *Set {
 	s := &Set{
 		items: make(map[interface{}]struct{}),
 		lock:  &sync.RWMutex{},
+		init:  true,
 	}
 
 	s.Add(items...)
@@ -113,7 +115,7 @@ func (s *Set) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Set) UnmarshalJSON(b []byte) error {
-	if s == nil {
+	if !s.init {
 		s = New()
 	}
 

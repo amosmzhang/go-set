@@ -78,3 +78,19 @@ func TestJSON(t *testing.T) {
 	assert.Equal(t, 4, s2.Size(), "s2 should have size 4")
 	fmt.Println(s2.Slice())
 }
+
+func TestJSON2(t *testing.T) {
+	type TestStruct struct {
+		A string `json:"a"`
+		B *Set   `json:"b"`
+	}
+
+	test := `{
+		"a": "hello",
+		"b": ["good", "bye"]
+	}`
+
+	var ts TestStruct
+	err := json.Unmarshal([]byte(test), &ts)
+	assert.Nil(t, err, "should not error unmarshalling")
+}
