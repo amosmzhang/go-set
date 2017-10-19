@@ -38,6 +38,9 @@ func TestRemove(t *testing.T) {
 	assert.Equal(t, 2, s1.Size(), "s1 should have size 2 after remove")
 	s1.Remove(3.0)
 	assert.Equal(t, 2, s1.Size(), "s1 should have size 2 after remove not found item")
+
+	s1.Clear()
+	assert.Equal(t, 0, s1.Size(), "s1 should be empty after clear")
 }
 
 func TestContains(t *testing.T) {
@@ -131,6 +134,9 @@ func TestOrderedSetAdd(t *testing.T) {
 	}
 	assert.Equal(t, 3, s1.Size(), "s1 should have size 3")
 	assert.Equal(t, []int{1, 2, 3}, s1.IntSlice(), "s1 intslice should match")
+
+	assert.True(t, s1.Contains(2), "s1 should contain 2")
+	assert.False(t, s1.Contains(2.0), "s1 should not contain 2.0")
 }
 
 func TestOrderedSetRemove(t *testing.T) {
@@ -150,6 +156,24 @@ func TestOrderedSetRemove(t *testing.T) {
 	s1.Add(4)
 	assert.Equal(t, 1, s1.Size(), "s1 should have size 1")
 	assert.Equal(t, []int{4}, s1.IntSlice(), "s1 intslice should match")
+
+	s1.Clear()
+	assert.Equal(t, 0, s1.Size(), "s1 should be empty after a clear")
+}
+
+func TestOrderedSetSlice(t *testing.T) {
+	s1 := NewOrderedSet(1, 2, 3)
+	slice1 := s1.Slice()
+	assert.Equal(t, 3, len(slice1), "slice1 should have size 3")
+
+	s2 := NewOrderedSet(1, "2")
+	slice2 := s2.StringSlice()
+	assert.Equal(t, 1, len(slice2), "slice2 should have size 1 (only 1 string)")
+	assert.Equal(t, "2", slice2[0], "slice2 should contain 2")
+
+	slice3 := s2.IntSlice()
+	assert.Equal(t, 1, len(slice3), "slice3 should have size 1 (only 1 int)")
+	assert.Equal(t, 1, slice3[0], "slice3 should contain 1")
 }
 
 func TestSetUnion(t *testing.T) {
@@ -204,4 +228,19 @@ func TestSetDifference(t *testing.T) {
 		fmt.Println(s4.Slice())
 	}
 	assert.Equal(t, 2, s4.Size(), "s4 should have size 2")
+}
+
+func TestSubsetSuperset(t *testing.T) {
+	s1 := NewBasicSet(1, 2, 3)
+	s2 := NewOrderedSet(4, 3, 2, 1)
+
+	assert.True(t, s1.IsSubsetOf(s2), "s1 should be subset of s2")
+	assert.False(t, s2.IsSubsetOf(s1), "s2 should not be a subset of s1")
+	assert.True(t, s2.IsSupersetOf(s1), "s2 is superset of s1")
+	assert.False(t, s1.IsSupersetOf(s2), "s1 is not superset of s2")
+
+	s3 := NewOrderedSet()
+	s4 := NewBasicSet()
+
+	assert.True(t, s3.IsSupersetOf(s4) && s3.IsSupersetOf(s4), "empty set checks")
 }

@@ -12,7 +12,6 @@ type BasicSet struct {
 	init  bool
 }
 
-// basic ops
 func NewBasicSet(items ...interface{}) *BasicSet {
 	s := &BasicSet{
 		items: make(map[interface{}]struct{}),
@@ -24,6 +23,7 @@ func NewBasicSet(items ...interface{}) *BasicSet {
 	return s
 }
 
+// basic ops
 func (s *BasicSet) Add(items ...interface{}) {
 	s.lock.Lock()
 	defer s.lock.Unlock()

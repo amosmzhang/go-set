@@ -12,6 +12,7 @@ type element struct {
 }
 
 // OrderedSet uses map with a rwmutex for thread safety
+// Element insertion order is kept
 type OrderedSet struct {
 	items map[interface{}]*element
 	root  *element
